@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface StudereUserRepository extends BaseUserRepository {
+public interface StudereUserRepository extends BaseUserRepository<StudereUser> {
 
     @EntityGraph(attributePaths = {"terms"})
     Optional<StudereUser> findById(UUID id);

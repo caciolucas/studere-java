@@ -2,10 +2,12 @@ package com.studere.studerejava.framework.controller;
 
 import com.studere.studerejava.framework.core.exceptions.BaseException;
 import com.studere.studerejava.framework.models.User;
+import com.studere.studerejava.framework.models.dto.ErrorResponseDTO;
 import com.studere.studerejava.framework.models.dto.RegisterUserDTO;
-import com.studere.studerejava.framework.services.AuthenticationService;
+import com.studere.studerejava.framework.services.BaseAuthenticationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 @RestController
 public abstract class AuthenticationController {
-    private final AuthenticationService authenticationService;
+    private final BaseAuthenticationService authenticationService;
 
-    public AuthenticationController(@Qualifier("authenticationService") AuthenticationService authenticationService) {
+    public AuthenticationController(@Qualifier("authenticationService") BaseAuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
     }
 
@@ -26,9 +28,10 @@ public abstract class AuthenticationController {
     public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDTO registerUserDTO) {
         try {
             User user = authenticationService.registerUser(registerUserDTO);
-            return ResponseEntity.ok().body("Usuário registrado com sucesso: " + user.getEmail());
+            return ResponseEntity.ok(user);
         } catch (BaseException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            ErrorResponseDTO errorResponse = new ErrorResponseDTO(e.getMessage(), HttpStatus.BAD_REQUEST.value());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
     }
 }

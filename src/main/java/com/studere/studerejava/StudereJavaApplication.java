@@ -17,5 +17,4 @@ public class StudereJavaApplication {
     public static void main(String[] args) {
         SpringApplication.run(StudereJavaApplication.class, args);
     }
-
 }
