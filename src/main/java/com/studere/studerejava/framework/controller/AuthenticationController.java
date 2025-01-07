@@ -34,4 +34,5 @@ public abstract class AuthenticationController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
     }
+
 }
