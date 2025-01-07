@@ -1,8 +1,12 @@
 package com.studere.studerejava.framework.controller;
 
 import com.studere.studerejava.framework.core.exceptions.BaseException;
+import com.studere.studerejava.framework.core.exceptions.InvalidCredentialsException;
+import com.studere.studerejava.framework.core.exceptions.NotFoundException;
 import com.studere.studerejava.framework.models.User;
 import com.studere.studerejava.framework.models.dto.ErrorResponseDTO;
+import com.studere.studerejava.framework.models.dto.LoginRequestDTO;
+import com.studere.studerejava.framework.models.dto.LoginResponseDTO;
 import com.studere.studerejava.framework.models.dto.RegisterUserDTO;
 import com.studere.studerejava.framework.services.BaseAuthenticationService;
 import jakarta.validation.Valid;
@@ -38,16 +42,16 @@ public abstract class AuthenticationController {
         }
     }
 
-//    @GetMapping("/login")
-//    public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
-//        try {
-//            LoginResponseDTO loginResponse = authenticationService.login(loginRequestDTO);
-//            return ResponseEntity.ok(loginResponse);
-//        } catch (InvalidCredentialsException | NotFoundException e) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(e.getMessage(), HttpStatus.UNAUTHORIZED.value()));
-//        } catch (RuntimeException e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseDTO(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
-//        }
-//    }
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
+        try {
+            LoginResponseDTO loginResponse = authenticationService.login(loginRequestDTO);
+            return ResponseEntity.ok(loginResponse);
+        } catch (InvalidCredentialsException | NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(e.getMessage(), HttpStatus.UNAUTHORIZED.value()));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseDTO(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
+        }
+    }
 
 }
