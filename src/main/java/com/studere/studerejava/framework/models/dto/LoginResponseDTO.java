@@ -20,4 +20,28 @@ public class LoginResponseDTO {
         this.accessToken = accessToken;
         this.tokenType = tokenType;
     }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public String getTokenType() {
+        return tokenType;
+    }
 }

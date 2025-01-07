@@ -14,30 +14,34 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class BaseAuthenticationService<T extends User, R extends BaseUserRepository> {
+public abstract class BaseAuthenticationService<T extends User, R extends BaseUserRepository<T>> {
     private final R userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
+    public BaseAuthenticationService(R userRepository, BCryptPasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
     public T registerUser(RegisterUserDTO registerUserDTO) throws RegisterEmailException {
         userRepository.findByEmail(registerUserDTO.getEmail()).ifPresent(user -> {
             throw new RegisterEmailException("Este e-mail já está em uso: " + registerUserDTO.getEmail());
         });
 
-        String hashedPassword = generateHashedPassword(registerUserDTO.getPassword());
+        String hashedPassword = passwordEncoder.encode(registerUserDTO.getPassword());
 
-        T newUser = T();
+        T newUser = (T) new User();
         newUser.setEmail(registerUserDTO.getEmail());
         newUser.setPassword(hashedPassword);
         newUser.setFullName(registerUserDTO.getFullName());
 
-        return userRepository.save(newUser);
+        return (T) userRepository.save(newUser);
     }
 
-    public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) throws InvalidCredentialsException {
-        T user = userRepository.findByEmail(loginRequestDTO.getEmail())
-                .orElseThrow(() -> new InvalidCredentialsException("Credenciais inválidas"));
+    public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
+        T user = userRepository.findByEmail(loginRequestDTO.getEmail()).orElseThrow(() -> new InvalidCredentialsException("Credenciais inválidas"));
 
         if (!passwordEncoder.matches(loginRequestDTO.getPassword(), user.getPassword())) {
             throw new InvalidCredentialsException("Credenciais inválidas");

@@ -36,6 +36,13 @@ dependencies {
     // PostgreSQL Driver
     runtimeOnly 'org.postgresql:postgresql'
 
+    // Jackson
+    //jackson-core-asl-1.7.4.jar
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.0'
+    //jackson-mapper-asl-1.7.4.jar
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
+    
+
     // Spring Boot Starter Validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
