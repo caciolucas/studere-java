@@ -1,4 +1,4 @@
-package com.studere.studerejava.framework.models.dto;
+package com.studere.studerejava.framework.models.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 

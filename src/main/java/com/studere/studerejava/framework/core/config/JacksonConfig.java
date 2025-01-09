@@ -1,4 +1,4 @@
-package com.studere.studerejava.framework.config;
+package com.studere.studerejava.framework.core.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;

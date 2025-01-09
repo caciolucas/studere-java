@@ -1,11 +1,11 @@
-package com.studere.studerejava.framework.models.dto;
+package com.studere.studerejava.framework.models.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public class RegisterUserDTO {
+public class RegisterUserRequestDTO {
     @Email(message = "Email must be a valid email address")
     @NotBlank(message = "Email is required")
     private String email;

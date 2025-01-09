@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    // Spring Boot Starter Web
+    // Spring Boot Starter Web (includes Jackson)
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
     // Spring Boot Starter Data JPA
@@ -29,31 +29,24 @@ dependencies {
 
     // JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5' // ou jjwt-gson se preferir
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5' // or jjwt-gson if preferred
 
     // PostgreSQL Driver
     runtimeOnly 'org.postgresql:postgresql'
 
-    // Jackson
-    //jackson-core-asl-1.7.4.jar
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.0'
-    //jackson-mapper-asl-1.7.4.jar
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
-    
-
     // Spring Boot Starter Validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    // Lombok (opcional, para reduzir boilerplate)
+    // Lombok (optional, to reduce boilerplate)
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    // Testes
+    // Tests
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 }
+
 
 tasks.named('test') {
     useJUnitPlatform()

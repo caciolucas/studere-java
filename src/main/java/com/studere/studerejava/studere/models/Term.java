@@ -22,11 +22,10 @@ public class Term extends BaseModel {
     @JoinColumn(name = "user_id", nullable = false)
     private StudereUser user;
 
-    // Se houver a entidade Course, defina o relacionamento aqui
     // @OneToMany(mappedBy = "term", cascade = CascadeType.ALL, orphanRemoval = true)
     // private List<Course> courses;
 
-    // Getters and Setters
+
     public String getName() {
         return name;
     }
@@ -59,5 +58,4 @@ public class Term extends BaseModel {
         this.user = user;
     }
 
-    // Se houver a entidade Course, adicione os getters e setters
 }
