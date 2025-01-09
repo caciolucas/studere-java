@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -56,6 +57,7 @@ public abstract class BaseAuthenticationService<T extends User, R extends BaseUs
         Map<String, Object> claims = new HashMap<>();
         claims.put("sub", user.getId());
         claims.put("iat", Instant.now().getEpochSecond()); // Issued at
+        claims.put("roles", List.of("ROLE_USER"));
 
         String token = jwtTokenProvider.createToken(claims);
 
@@ -67,6 +69,5 @@ public abstract class BaseAuthenticationService<T extends User, R extends BaseUs
                 token,
                 "bearer"
         );
-
     }
 }
