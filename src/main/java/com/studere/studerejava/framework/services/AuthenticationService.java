@@ -15,4 +15,9 @@ public class AuthenticationService extends BaseAuthenticationService<User, UserR
         super(userRepository, passwordEncoder, jwtTokenProvider);
     }
 
+    @Override
+    protected User createNewUser() {
+        return new User();
+    }
+
 }

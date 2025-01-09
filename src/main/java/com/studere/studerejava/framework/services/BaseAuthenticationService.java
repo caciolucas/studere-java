@@ -26,6 +26,8 @@ public abstract class BaseAuthenticationService<T extends User, R extends BaseUs
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
+    protected abstract T createNewUser();
+
     public T registerUser(RegisterUserRequestDTO registerUserRequestDTO) throws RegisterEmailException {
         userRepository.findByEmail(registerUserRequestDTO.getEmail()).ifPresent(user -> {
             throw new RegisterEmailException("Este e-mail já está em uso: " + registerUserRequestDTO.getEmail());
@@ -33,7 +35,7 @@ public abstract class BaseAuthenticationService<T extends User, R extends BaseUs
 
         String hashedPassword = passwordEncoder.encode(registerUserRequestDTO.getPassword());
 
-        T newUser = (T) new User();
+        T newUser = createNewUser();
         newUser.setEmail(registerUserRequestDTO.getEmail());
         newUser.setPassword(hashedPassword);
         newUser.setFullName(registerUserRequestDTO.getFullName());
@@ -43,7 +45,7 @@ public abstract class BaseAuthenticationService<T extends User, R extends BaseUs
 
     public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
         Optional<T> maybeUser = userRepository.findByEmail(loginRequestDTO.getEmail());
-        
+
         T user = userRepository.findByEmail(loginRequestDTO.getEmail()).orElseThrow(() -> new InvalidCredentialsException("Credenciais inválidas"));
 
         if (!passwordEncoder.matches(loginRequestDTO.getPassword(), user.getPassword())) {

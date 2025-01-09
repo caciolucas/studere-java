@@ -16,4 +16,9 @@ public class StudereAuthenticationService extends BaseAuthenticationService<Stud
         super(userRepository, passwordEncoder, jwtTokenProvider);
     }
 
+    @Override
+    protected StudereUser createNewUser() {
+        return new StudereUser();
+    }
+
 }
