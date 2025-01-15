@@ -10,7 +10,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class User extends BaseModel {
+public abstract class User extends BaseModel {
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;

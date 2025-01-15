@@ -9,9 +9,12 @@ import java.util.List;
 
 @Setter
 @Getter
+@Entity
+@Table(name = "plans")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Plan extends BaseModel {
     @Column(name = "title", nullable = false)
-    private String tile;
+    private String title;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "module_id", nullable = false)

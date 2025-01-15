@@ -1,10 +1,10 @@
 package com.studere.studerejava.studere.models;
 
 import com.studere.studerejava.framework.models.PlanItem;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "study_plan_topics")
+@DiscriminatorValue("STUDERE")
 public class StudyPlanTopic extends PlanItem {
 }
