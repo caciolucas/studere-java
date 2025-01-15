@@ -3,7 +3,7 @@ package com.studere.studerejava.studere.controllers;
 import com.studere.studerejava.framework.core.exceptions.BaseException;
 import com.studere.studerejava.framework.models.dto.response.ErrorResponseDTO;
 import com.studere.studerejava.studere.models.Term;
-import com.studere.studerejava.studere.models.dto.CreateUpdateTermDTO;
+import com.studere.studerejava.studere.models.dto.TermCreateOrUpdateDTO;
 import com.studere.studerejava.studere.services.TermService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,9 +25,9 @@ public class TermController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> createTerm(@RequestBody CreateUpdateTermDTO createUpdateTermDTO, Principal principal) {
+    public ResponseEntity<?> createTerm(@RequestBody TermCreateOrUpdateDTO termCreateOrUpdateDTO, Principal principal) {
         try {
-            Term term = termService.createTerm(createUpdateTermDTO, UUID.fromString(principal.getName()));
+            Term term = termService.createTerm(termCreateOrUpdateDTO, UUID.fromString(principal.getName()));
             return ResponseEntity.ok(term);
         } catch (BaseException e) {
             throw e;
@@ -75,9 +75,9 @@ public class TermController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateTerm(@PathVariable UUID id, @RequestBody CreateUpdateTermDTO createUpdateTermDTO, Principal principal) {
+    public ResponseEntity<?> updateTerm(@PathVariable UUID id, @RequestBody TermCreateOrUpdateDTO termCreateOrUpdateDTO, Principal principal) {
         try {
-            Term term = termService.updateTermById(id, createUpdateTermDTO, UUID.fromString(principal.getName()));
+            Term term = termService.updateTermById(id, termCreateOrUpdateDTO, UUID.fromString(principal.getName()));
             return ResponseEntity.ok(term);
         } catch (BaseException e) {
             throw e;

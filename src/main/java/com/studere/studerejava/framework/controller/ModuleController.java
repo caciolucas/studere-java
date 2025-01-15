@@ -14,7 +14,7 @@ import java.security.Principal;
 import java.util.UUID;
 
 public class ModuleController<T extends Module> {
-    private final ModuleService<T> moduleService;
+    protected final ModuleService<T> moduleService;
 
     public ModuleController(ModuleService<T> moduleService) {
         this.moduleService = moduleService;

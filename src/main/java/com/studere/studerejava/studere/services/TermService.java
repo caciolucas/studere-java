@@ -3,7 +3,7 @@ package com.studere.studerejava.studere.services;
 import com.studere.studerejava.framework.core.exceptions.NotFoundException;
 import com.studere.studerejava.studere.models.StudereUser;
 import com.studere.studerejava.studere.models.Term;
-import com.studere.studerejava.studere.models.dto.CreateUpdateTermDTO;
+import com.studere.studerejava.studere.models.dto.TermCreateOrUpdateDTO;
 import com.studere.studerejava.studere.repositories.StudereUserRepository;
 import com.studere.studerejava.studere.repositories.TermRepository;
 import org.springframework.stereotype.Service;
@@ -28,14 +28,14 @@ public class TermService {
     }
 
     // Create term
-    public Term createTerm(CreateUpdateTermDTO createUpdateTermDTO, UUID userId) {
+    public Term createTerm(TermCreateOrUpdateDTO termCreateOrUpdateDTO, UUID userId) {
         StudereUser user = studereUserRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
         Term term = new Term();
-        term.setName(createUpdateTermDTO.getName());
-        term.setStartDate(createUpdateTermDTO.getStartDate());
-        term.setEndDate(createUpdateTermDTO.getEndDate());
+        term.setName(termCreateOrUpdateDTO.getName());
+        term.setStartDate(termCreateOrUpdateDTO.getStartDate());
+        term.setEndDate(termCreateOrUpdateDTO.getEndDate());
         term.setUser(user);
 
         return termRepository.save(term);
@@ -53,13 +53,13 @@ public class TermService {
     }
 
     // Update term by id
-    public Term updateTermById(UUID id, CreateUpdateTermDTO createUpdateTermDTO, UUID userId) {
+    public Term updateTermById(UUID id, TermCreateOrUpdateDTO termCreateOrUpdateDTO, UUID userId) {
         Term term = termRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new NotFoundException("Term not found"));
 
-        term.setName(createUpdateTermDTO.getName());
-        term.setStartDate(createUpdateTermDTO.getStartDate());
-        term.setEndDate(createUpdateTermDTO.getEndDate());
+        term.setName(termCreateOrUpdateDTO.getName());
+        term.setStartDate(termCreateOrUpdateDTO.getStartDate());
+        term.setEndDate(termCreateOrUpdateDTO.getEndDate());
 
         return termRepository.save(term);
     }

@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.util.Date;
 
 @Getter
-public class CreateUpdateTermDTO {
+public class TermCreateOrUpdateDTO {
     @NotBlank(message = "Name is required")
     private String name;
 

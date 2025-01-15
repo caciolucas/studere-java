@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 public abstract class ModuleService<T extends Module> {
-    private final ModuleRepository<T> moduleRepository;
+    protected final ModuleRepository<T> moduleRepository;
 
     public ModuleService(ModuleRepository<T> moduleRepository) {
         this.moduleRepository = moduleRepository;
