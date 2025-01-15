@@ -48,4 +48,42 @@ public class TermController {
                     .body(new ErrorResponseDTO(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
         }
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getTerm(@PathVariable UUID id, Principal principal) {
+        try {
+            return ResponseEntity.ok(termService.getTermById(id, UUID.fromString(principal.getName())));
+        } catch (BaseException e) {
+            throw e;
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponseDTO(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTerm(@PathVariable UUID id, Principal principal) {
+        try {
+            termService.deleteTermById(id, UUID.fromString(principal.getName()));
+            return ResponseEntity.ok().build();
+        } catch (BaseException e) {
+            throw e;
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponseDTO(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateTerm(@PathVariable UUID id, @RequestBody CreateUpdateTermDTO createUpdateTermDTO, Principal principal) {
+        try {
+            Term term = termService.updateTermById(id, createUpdateTermDTO, UUID.fromString(principal.getName()));
+            return ResponseEntity.ok(term);
+        } catch (BaseException e) {
+            throw e;
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponseDTO(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
+        }
+    }
 }

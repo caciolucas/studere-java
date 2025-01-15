@@ -40,4 +40,27 @@ public class TermService {
 
         return termRepository.save(term);
     }
+
+    // Get term by id
+    public Term getTermById(UUID id, UUID userId) {
+        return termRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new NotFoundException("Term not found"));
+    }
+
+    // Delete term by id
+    public void deleteTermById(UUID id, UUID userId) {
+        termRepository.deleteByIdAndUserId(id, userId);
+    }
+
+    // Update term by id
+    public Term updateTermById(UUID id, CreateUpdateTermDTO createUpdateTermDTO, UUID userId) {
+        Term term = termRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new NotFoundException("Term not found"));
+
+        term.setName(createUpdateTermDTO.getName());
+        term.setStartDate(createUpdateTermDTO.getStartDate());
+        term.setEndDate(createUpdateTermDTO.getEndDate());
+
+        return termRepository.save(term);
+    }
 }
