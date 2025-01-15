@@ -23,8 +23,7 @@ public abstract class ModuleController<T extends Module> {
     @PostMapping("/")
     public ResponseEntity<?> createModule(@Valid @RequestBody ModuleCreateOrUpdateDTO moduleCreateOrUpdateDTO, Principal principal) {
         try {
-            T module = moduleService.createModule(moduleCreateOrUpdateDTO);
-            return ResponseEntity.ok(module);
+            return ResponseEntity.ok(moduleService.createModule(moduleCreateOrUpdateDTO));
         } catch (BaseException e) {
             throw e;
         } catch (RuntimeException e) {

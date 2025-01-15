@@ -14,12 +14,10 @@ import java.util.UUID;
 @Service
 public class CourseService extends ModuleService<Course> {
     private final TermService termService;
-    private final TermRepository termRepository;
 
     public CourseService(ModuleRepository<Course> moduleRepository, TermService termService, TermRepository termRepository) {
         super(moduleRepository);
         this.termService = termService;
-        this.termRepository = termRepository;
     }
 
     @Override
@@ -52,6 +50,4 @@ public class CourseService extends ModuleService<Course> {
 
         return moduleRepository.save(course);
     }
-
-
 }
