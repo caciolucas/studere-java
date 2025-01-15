@@ -13,10 +13,12 @@ import java.util.UUID;
 
 @Service
 public class CourseService extends ModuleService<Course> {
-    private TermRepository termRepository;
+    private final TermService termService;
+    private final TermRepository termRepository;
 
-    public CourseService(ModuleRepository<Course> moduleRepository, TermRepository termRepository) {
+    public CourseService(ModuleRepository<Course> moduleRepository, TermService termService, TermRepository termRepository) {
         super(moduleRepository);
+        this.termService = termService;
         this.termRepository = termRepository;
     }
 
@@ -28,8 +30,7 @@ public class CourseService extends ModuleService<Course> {
     public Course createModule(CourseCreateOrUpdateDTO courseCreateOrUpdateDTO, UUID userId) {
         Course newModule = createNewModule();
 
-        Term term = termRepository.findByIdAndUserId(courseCreateOrUpdateDTO.getTermId(), userId)
-                .orElseThrow(() -> new NotFoundException("Term not found"));
+        Term term = termService.getTermById(courseCreateOrUpdateDTO.getTermId(), userId);
 
         newModule.setName(courseCreateOrUpdateDTO.getName());
         newModule.setDescription(courseCreateOrUpdateDTO.getDescription());
@@ -43,8 +44,7 @@ public class CourseService extends ModuleService<Course> {
         Course course = moduleRepository.findByIdAndUserId(courseId, userId)
                 .orElseThrow(() -> new NotFoundException("Course not found"));
 
-        Term term = termRepository.findByIdAndUserId(courseCreateOrUpdateDTO.getTermId(), userId)
-                .orElseThrow(() -> new NotFoundException("Term not found"));
+        Term term = termService.getTermById(courseCreateOrUpdateDTO.getTermId(), userId);
 
         course.setName(courseCreateOrUpdateDTO.getName());
         course.setDescription(courseCreateOrUpdateDTO.getDescription());

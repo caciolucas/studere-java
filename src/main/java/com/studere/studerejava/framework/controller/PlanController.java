@@ -1,10 +1,12 @@
 package com.studere.studerejava.framework.controller;
 
 import com.studere.studerejava.framework.core.exceptions.BaseException;
-import com.studere.studerejava.framework.models.Module;
-import com.studere.studerejava.framework.models.dto.request.ModuleCreateOrUpdateDTO;
+import com.studere.studerejava.framework.models.Plan;
+import com.studere.studerejava.framework.models.PlanItem;
+import com.studere.studerejava.framework.models.dto.request.PlanAiGenerateDTO;
+import com.studere.studerejava.framework.models.dto.request.PlanCreateOrUpdateDTO;
 import com.studere.studerejava.framework.models.dto.response.ErrorResponseDTO;
-import com.studere.studerejava.framework.services.ModuleService;
+import com.studere.studerejava.framework.services.PlanService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,17 +15,17 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.UUID;
 
-public abstract class ModuleController<T extends Module> {
-    protected final ModuleService<T> moduleService;
+public abstract class PlanController<T extends Plan, U extends PlanItem> {
+    protected final PlanService<T, U> planService;
 
-    public ModuleController(ModuleService<T> moduleService) {
-        this.moduleService = moduleService;
+    public PlanController(PlanService<T, U> planService) {
+        this.planService = planService;
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> createModule(@Valid @RequestBody ModuleCreateOrUpdateDTO moduleCreateOrUpdateDTO, Principal principal) {
+    public ResponseEntity<?> createPlan(@Valid @RequestBody PlanCreateOrUpdateDTO planCreateOrUpdateDTO, Principal principal) {
         try {
-            T module = moduleService.createModule(moduleCreateOrUpdateDTO);
+            T module = planService.createPlan(planCreateOrUpdateDTO, UUID.fromString(principal.getName()));
             return ResponseEntity.ok(module);
         } catch (BaseException e) {
             throw e;
@@ -34,9 +36,9 @@ public abstract class ModuleController<T extends Module> {
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> getModules(Principal principal) {
+    public ResponseEntity<?> getPlans(Principal principal) {
         try {
-            return ResponseEntity.ok(moduleService.listModulesByUserId(UUID.fromString(principal.getName())));
+            return ResponseEntity.ok(planService.listPlansByUserId(UUID.fromString(principal.getName())));
         } catch (BaseException e) {
             throw e;
         } catch (RuntimeException e) {
@@ -46,9 +48,9 @@ public abstract class ModuleController<T extends Module> {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getModule(@PathVariable UUID id, Principal principal) {
+    public ResponseEntity<?> getPlan(@PathVariable UUID id, Principal principal) {
         try {
-            return ResponseEntity.ok(moduleService.findModuleById(id, UUID.fromString(principal.getName())));
+            return ResponseEntity.ok(planService.findPlanById(id, UUID.fromString(principal.getName())));
         } catch (BaseException e) {
             throw e;
         } catch (RuntimeException e) {
@@ -58,9 +60,9 @@ public abstract class ModuleController<T extends Module> {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateModule(@PathVariable UUID id, @Valid @RequestBody ModuleCreateOrUpdateDTO moduleCreateOrUpdateDTO, Principal principal) {
+    public ResponseEntity<?> updatePlan(@PathVariable UUID id, @Valid @RequestBody PlanCreateOrUpdateDTO planCreateOrUpdateDTO, Principal principal) {
         try {
-            return ResponseEntity.ok(moduleService.updateModule(moduleCreateOrUpdateDTO, id, UUID.fromString(principal.getName())));
+            return ResponseEntity.ok(planService.updatePlan(planCreateOrUpdateDTO, id, UUID.fromString(principal.getName())));
         } catch (BaseException e) {
             throw e;
         } catch (RuntimeException e) {
@@ -70,9 +72,9 @@ public abstract class ModuleController<T extends Module> {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteModule(@PathVariable UUID id, Principal principal) {
+    public ResponseEntity<?> deletePlan(@PathVariable UUID id, Principal principal) {
         try {
-            moduleService.deleteModule(id, UUID.fromString(principal.getName()));
+            planService.deletePlan(id, UUID.fromString(principal.getName()));
             return ResponseEntity.ok().build();
         } catch (BaseException e) {
             throw e;
@@ -81,4 +83,17 @@ public abstract class ModuleController<T extends Module> {
                     .body(new ErrorResponseDTO(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
         }
     }
+
+    @PostMapping("/ai-generate")
+    public ResponseEntity<?> aiGenerate(@Valid @RequestBody PlanAiGenerateDTO planAiGenerateDTO, Principal principal) {
+        try {
+            return ResponseEntity.ok(planService.aiGeneratePlan(planAiGenerateDTO, UUID.fromString(principal.getName())));
+        } catch (BaseException e) {
+            throw e;
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponseDTO(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
+        }
+    }
+
 }

@@ -60,4 +60,6 @@ public class OpenAiService {
             throw new OpenAIAPIError("OpenAI API error: " + e.getMessage());
         }
     }
+
+
 }

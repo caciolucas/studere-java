@@ -37,7 +37,7 @@ public abstract class ModuleService<T extends Module> {
         moduleRepository.deleteByIdAndUserId(moduleId, userId);
     }
 
-    public T getModuleById(UUID moduleId, UUID userId) {
+    public T findModuleById(UUID moduleId, UUID userId) {
         return moduleRepository.findByIdAndUserId(moduleId, userId)
                 .orElseThrow(() -> new NotFoundException("Module not found"));
     }
