@@ -6,30 +6,26 @@ import com.studere.studerejava.framework.models.dto.request.LoginRequestDTO;
 import com.studere.studerejava.framework.models.dto.request.RegisterUserRequestDTO;
 import com.studere.studerejava.framework.models.dto.response.ErrorResponseDTO;
 import com.studere.studerejava.framework.models.dto.response.LoginResponseDTO;
-import com.studere.studerejava.framework.repositories.BaseUserRepository;
-import com.studere.studerejava.framework.services.BaseAuthenticationService;
+import com.studere.studerejava.framework.repositories.UserRepository;
+import com.studere.studerejava.framework.services.AuthenticationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 
-@RequestMapping("/api/auth")
-@RestController
-public abstract class BaseAuthenticationController<T extends User, R extends BaseUserRepository<T>> {
-    private final BaseAuthenticationService<T, R> authenticationService;
+public abstract class AuthenticationController<T extends User, R extends UserRepository<T>> {
+    private final AuthenticationService<T, R> authenticationService;
 
-    public BaseAuthenticationController(BaseAuthenticationService<T, R> authenticationService) {
+    public AuthenticationController(AuthenticationService<T, R> authenticationService) {
         this.authenticationService = authenticationService;
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterUserRequestDTO registerUserRequestDTO) {
         try {
-            User user = authenticationService.registerUser(registerUserRequestDTO);
+            T user = authenticationService.registerUser(registerUserRequestDTO);
             return ResponseEntity.ok(user);
         } catch (BaseException e) {
             throw e; // Será tratada no GlobalExceptionHandler

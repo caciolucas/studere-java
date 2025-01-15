@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class OpenAIService {
+public class OpenAiService {
 
     private final OpenAIClient client;
 
@@ -19,7 +19,7 @@ public class OpenAIService {
     private final int maxTokens;
 
 
-    public OpenAIService(
+    public OpenAiService(
             @Value("${openai.api.key}") String apiKey,
             @Value("${openai.model:gpt-4o}") String model,
             @Value("${openai.temperature:0.7}") double temperature,
@@ -57,7 +57,7 @@ public class OpenAIService {
             // Assuming the first choice is desired
             return chatCompletion.choices().get(0).message().content().orElse("").trim();
         } catch (Exception e) {
-            throw new OpenAIAPIError("OpenAI API error: " + e.getMessage(), e);
+            throw new OpenAIAPIError("OpenAI API error: " + e.getMessage());
         }
     }
 }

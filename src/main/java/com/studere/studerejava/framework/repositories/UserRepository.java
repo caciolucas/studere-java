@@ -1,9 +1,13 @@
 package com.studere.studerejava.framework.repositories;
 
 import com.studere.studerejava.framework.models.User;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.NoRepositoryBean;
 
-@Repository
-public interface UserRepository extends BaseUserRepository<User> {
-    // Métodos específicos para User, se necessário
+import java.util.Optional;
+import java.util.UUID;
+
+@NoRepositoryBean
+public interface UserRepository<T extends User> extends JpaRepository<T, UUID> {
+    Optional<T> findByEmail(String email);
 }
