@@ -55,7 +55,7 @@ public abstract class PlanService<T extends Plan, U extends PlanItem> {
     }
 
     public T updatePlan(PlanCreateOrUpdateDTO planCreateOrUpdateDTO, UUID planId, UUID userId) {
-        T plan = planRepository.findByIdAndUserId(planId, userId)
+        T plan = planRepository.findByIdAndModuleUserId(planId, userId)
                 .orElseThrow(() -> new NotFoundException("Plan not found"));
 
         Module module = moduleService.findModuleById(planCreateOrUpdateDTO.getModuleId(), userId);
@@ -76,11 +76,11 @@ public abstract class PlanService<T extends Plan, U extends PlanItem> {
     }
 
     public void deletePlan(UUID planId, UUID userId) {
-        planRepository.deleteByIdAndUserId(planId, userId);
+        planRepository.deleteByIdAndModuleUserId(planId, userId);
     }
 
     public List<T> listPlansByUserId(UUID userId) {
-        return planRepository.findByUserId(userId);
+        return planRepository.findByModuleUserId(userId);
     }
 
     public T aiGeneratePlan(PlanAiGenerateDTO planAiGenerateDTO, UUID userId) {
@@ -122,7 +122,7 @@ public abstract class PlanService<T extends Plan, U extends PlanItem> {
     }
 
     public T findPlanById(UUID planId, UUID userId) {
-        return planRepository.findByIdAndUserId(planId, userId)
+        return planRepository.findByIdAndModuleUserId(planId, userId)
                 .orElseThrow(() -> new NotFoundException("Plan not found"));
     }
 

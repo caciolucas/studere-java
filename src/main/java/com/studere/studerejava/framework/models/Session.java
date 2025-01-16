@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.List;
 
 @Setter
@@ -27,6 +28,22 @@ public abstract class Session extends BaseModel {
     @Column(name = "status", nullable = false)
     private SessionStatus status;
 
+    @ManyToOne
+    @JoinColumn(name = "plan_id", nullable = false)
+    private Plan plan;
+
+    @Column(name = "last_paused_at")
+    private Date lastPausedAt;
+
+    @Column(name = "total_paused_time")
+    private Long totalPausedTime;
+
+    @Column(name = "total_active_time")
+    private Long totalActiveTime;
+
+    @Column(name = "end_at")
+    private Date endAt;
+    
     @ManyToMany
     @JoinTable(
             name = "session_items",
