@@ -9,6 +9,7 @@ import com.studere.studerejava.framework.models.dto.request.SessionStartDTO;
 import com.studere.studerejava.framework.models.enums.SessionStatus;
 import com.studere.studerejava.framework.repositories.SessionRepository;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -110,6 +111,7 @@ public abstract class SessionService<T extends Session> {
      * @return List of number of sessions for each day
      */
     public List<T> getSessionsForLastNDays(int N) {
-        return sessionRepository.findSessionsForLastNDays(N);
+        LocalDateTime nowMinusNDays = LocalDateTime.now().minusDays(N);
+        return sessionRepository.findSessionsAfterDate(nowMinusNDays);
     }
 }
