@@ -6,9 +6,9 @@ import com.studere.studerejava.framework.models.dto.response.GenericMetricRespon
 import com.studere.studerejava.framework.models.dto.response.SessionStreakDTO;
 import com.studere.studerejava.framework.models.dto.response.SessionTimeDistributionDTO;
 
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class DashboardService<T extends Session> {
@@ -50,9 +50,57 @@ public abstract class DashboardService<T extends Session> {
     }
 
     /**
-     * Fetch session streaks.
-     *
-     * @return List of SessionStreakDTO containing streak data.
+     * Groups sessions by the LocalDate portion of their createdAt.
+     */
+    protected Map<LocalDate, List<T>> groupSessionsByDate(List<T> sessions) {
+        return sessions.stream()
+                .collect(Collectors.groupingBy(session ->
+                        session.getCreatedAt()
+                                .toInstant()
+                                .atZone(ZoneId.systemDefault())
+                                .toLocalDate()
+                ));
+    }
+
+    /**
+     * Decides if a group of sessions for a specific day is considered "completed".
+     * Subclasses must define their own rule.
+     */
+    protected abstract boolean isDayCompleted(List<T> dailySessions);
+
+    /**
+     * Common method to build the streak DTOs from a list of sessions.
+     * 1. Group by date
+     * 2. For each date, build a SessionStreakDTO with "completed" decided by isDayCompleted(...)
+     * <p>
+     * Works like a template method by calling isDayCompleted(...) which must be implemented by subclasses.
+     */
+    protected List<SessionStreakDTO> buildStreaks(List<T> sessions) {
+        Map<LocalDate, List<T>> sessionsByDate = groupSessionsByDate(sessions);
+
+        List<SessionStreakDTO> streaks = new ArrayList<>();
+
+        for (Map.Entry<LocalDate, List<T>> entry : sessionsByDate.entrySet()) {
+            LocalDate date = entry.getKey();
+            List<T> dailySessions = entry.getValue();
+
+            SessionStreakDTO streakDTO = new SessionStreakDTO();
+            streakDTO.setReferenceDate(
+                    Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())
+            );
+
+            // Use the subclass rule:
+            streakDTO.setCompleted(isDayCompleted(dailySessions));
+
+            streaks.add(streakDTO);
+        }
+
+        return streaks;
+    }
+
+    /**
+     * Fetch session streaks. Each subclass can retrieve its sessions and then
+     * call buildStreaks(...) to handle the grouping + completed logic.
      */
     public abstract List<SessionStreakDTO> getStreaks();
 
