@@ -5,6 +5,7 @@ import com.studere.studerejava.framework.models.Goal;
 import com.studere.studerejava.framework.models.Module;
 import com.studere.studerejava.framework.models.dto.request.GoalCreateOrUpdateDTO;
 import com.studere.studerejava.framework.repositories.GoalRepository;
+import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.UUID;
@@ -43,5 +44,16 @@ public abstract class GoalService<T extends Goal> {
         goal.setTitle(goalCreateOrUpdateDTO.getTitle());
         goal.setDescription(goalCreateOrUpdateDTO.getDescription());
         return goalRepository.save(goal);
+    }
+
+    protected MethodParameter getMethodParameter() {
+        try {
+            return new MethodParameter(
+                    this.getClass().getDeclaredMethod("validateGoal", GoalCreateOrUpdateDTO.class),
+                    0
+            );
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

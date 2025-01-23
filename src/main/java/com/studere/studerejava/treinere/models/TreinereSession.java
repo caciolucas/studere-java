@@ -11,5 +11,5 @@ import lombok.Setter;
 @Entity
 @DiscriminatorValue("TREINERE")
 public class TreinereSession extends Session {
-
+    
 }
