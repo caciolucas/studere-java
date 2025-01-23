@@ -33,6 +33,7 @@ public class WeightGoalService extends GoalService<WeightGoal> {
             BindingResult bindingResult =
                     new BeanPropertyBindingResult(weightDto, "weightGoalCreateOrUpdateDTO");
 
+            // Custom validations
             if (weightDto.getInitialWeight() < 0) {
                 bindingResult.rejectValue(
                         "initialWeight",

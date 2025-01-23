@@ -34,7 +34,6 @@ public abstract class PlanService<T extends Plan, U extends PlanItem> {
 
     protected abstract U createNewPlanItem();
 
-    protected abstract String generatePrompt(String input);
 
     protected T setPlanFieldsFromDTO(PlanCreateOrUpdateDTO<? extends PlanItemDTO> planCreateOrUpdateDTO, T plan, UUID userId) {
         Module module = moduleService.findModuleById(planCreateOrUpdateDTO.getModuleId(), userId);
@@ -58,7 +57,6 @@ public abstract class PlanService<T extends Plan, U extends PlanItem> {
         Module module = moduleService.findModuleById(planCreateOrUpdateDTO.getModuleId(), userId);
 
         T newPlan = (T) setPlanFieldsFromDTO(planCreateOrUpdateDTO, createNewPlan(), userId);
-
         addPlanItemsFromDTO(planCreateOrUpdateDTO, newPlan);
 
         return planRepository.save(newPlan);
@@ -72,8 +70,6 @@ public abstract class PlanService<T extends Plan, U extends PlanItem> {
 
         // Using the same method to set the fields from the DTO
         setPlanFieldsFromDTO(planCreateOrUpdateDTO, plan, userId);
-
-        plan.getPlanItems().clear();
         addPlanItemsFromDTO(planCreateOrUpdateDTO, plan);
 
         return planRepository.save(plan);
@@ -86,6 +82,13 @@ public abstract class PlanService<T extends Plan, U extends PlanItem> {
     public List<T> listPlansByUserId(UUID userId) {
         return planRepository.findByModuleUserId(userId);
     }
+
+    public T findPlanById(UUID planId, UUID userId) {
+        return planRepository.findByIdAndModuleUserId(planId, userId)
+                .orElseThrow(() -> new NotFoundException("Plan not found"));
+    }
+
+    protected abstract String generatePrompt(String input);
 
     /**
      * Hook method to prepare the final input string we send to generatePrompt(...).
@@ -143,11 +146,6 @@ public abstract class PlanService<T extends Plan, U extends PlanItem> {
         planRepository.save(studyPlan);
 
         return studyPlan;
-    }
-
-    public T findPlanById(UUID planId, UUID userId) {
-        return planRepository.findByIdAndModuleUserId(planId, userId)
-                .orElseThrow(() -> new NotFoundException("Plan not found"));
     }
 
     /**

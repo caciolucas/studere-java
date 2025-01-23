@@ -17,15 +17,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.security.Principal;
 import java.util.UUID;
 
-public abstract class GoalController<T extends Goal> {
-    private final GoalService<T> goalService;
+public abstract class GoalController<T extends Goal, D extends GoalCreateOrUpdateDTO> {
+    private final GoalService<T, D> goalService;
 
-    public GoalController(GoalService<T> goalService) {
+    public GoalController(GoalService<T, D> goalService) {
         this.goalService = goalService;
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> createGoal(@Valid @RequestBody GoalCreateOrUpdateDTO goalCreateOrUpdateDTO, Principal principal) throws MethodArgumentNotValidException {
+    public ResponseEntity<?> createGoal(@Valid @RequestBody D goalCreateOrUpdateDTO, Principal principal) throws MethodArgumentNotValidException {
         try {
             T goal = goalService.createGoal(goalCreateOrUpdateDTO, UUID.fromString(principal.getName()));
             return ResponseEntity.ok(goal);
@@ -38,7 +38,7 @@ public abstract class GoalController<T extends Goal> {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateGoal(@Valid @RequestBody GoalCreateOrUpdateDTO goalCreateOrUpdateDTO, @PathVariable UUID id, Principal principal) throws MethodArgumentNotValidException {
+    public ResponseEntity<?> updateGoal(@Valid @RequestBody D goalCreateOrUpdateDTO, @PathVariable UUID id, Principal principal) throws MethodArgumentNotValidException {
         try {
             T goal = goalService.updateGoal(goalCreateOrUpdateDTO, id, UUID.fromString(principal.getName()));
             return ResponseEntity.ok(goal);

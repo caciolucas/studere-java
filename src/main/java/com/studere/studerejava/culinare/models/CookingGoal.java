@@ -3,8 +3,11 @@ package com.studere.studerejava.culinare.models;
 import com.studere.studerejava.culinare.models.enums.ChefLevel;
 import com.studere.studerejava.framework.models.Goal;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
-
+@Getter
+@Setter
 @Entity
 @DiscriminatorValue("CULINARE")
 public class CookingGoal extends Goal {

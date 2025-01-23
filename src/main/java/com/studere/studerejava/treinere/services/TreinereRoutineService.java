@@ -64,8 +64,6 @@ public class TreinereRoutineService extends PlanService<TreinereRoutine, Exercis
         return String.format("""
                 Baseada na descrição informada, retorne um json no formato abaixo que representará um plano de treino para o individual abaixo:
                 
-                %s
-                
                 [{{
                   "title": "Task name",
                   "topics": [

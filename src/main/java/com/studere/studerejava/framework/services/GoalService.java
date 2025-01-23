@@ -10,7 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.UUID;
 
-public abstract class GoalService<T extends Goal> {
+public abstract class GoalService<T extends Goal, D extends GoalCreateOrUpdateDTO> {
     protected final GoalRepository<T> goalRepository;
     protected final ModuleService moduleService;
 
@@ -21,7 +21,11 @@ public abstract class GoalService<T extends Goal> {
 
     protected abstract T createNewGoal();
 
-    public T createGoal(GoalCreateOrUpdateDTO goalCreateOrUpdateDTO, UUID userId) throws MethodArgumentNotValidException {
+    protected void setOtherFields(T goal, D goalCreateOrUpdateDTO) {
+        // Override this method in the subclass if you have any additional fields to set
+    }
+
+    public T createGoal(D goalCreateOrUpdateDTO, UUID userId) throws MethodArgumentNotValidException {
         T newGoal = createNewGoal();
 
         validateGoal(goalCreateOrUpdateDTO);
@@ -30,12 +34,15 @@ public abstract class GoalService<T extends Goal> {
 
         newGoal.setTitle(goalCreateOrUpdateDTO.getTitle());
         newGoal.setDescription(goalCreateOrUpdateDTO.getDescription());
+        newGoal.setModule(module);
+        setOtherFields(newGoal, goalCreateOrUpdateDTO);
+
         return goalRepository.save(newGoal);
     }
 
-    protected abstract void validateGoal(GoalCreateOrUpdateDTO goalCreateOrUpdateDTO) throws MethodArgumentNotValidException;
+    protected abstract void validateGoal(D goalCreateOrUpdateDTO) throws MethodArgumentNotValidException;
 
-    public T updateGoal(GoalCreateOrUpdateDTO goalCreateOrUpdateDTO, UUID goalId, UUID userId) throws MethodArgumentNotValidException {
+    public T updateGoal(D goalCreateOrUpdateDTO, UUID goalId, UUID userId) throws MethodArgumentNotValidException {
         T goal = goalRepository.findByIdAndUserId(goalId, userId)
                 .orElseThrow(() -> new NotFoundException("Goal not found"));
 
