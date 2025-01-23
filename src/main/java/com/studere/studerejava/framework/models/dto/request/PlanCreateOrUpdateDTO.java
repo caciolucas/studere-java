@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Getter
-public class PlanCreateOrUpdateDTO {
+public class PlanCreateOrUpdateDTO<I extends PlanItemDTO> {
     @NotBlank(message = "'title' is required")
     private String title;
 
@@ -16,5 +16,5 @@ public class PlanCreateOrUpdateDTO {
     @NotBlank(message = "'module_id' is required")
     private UUID moduleId;
 
-    private List<PlanItemDTO> items;
+    private List<I> items;
 }

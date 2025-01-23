@@ -1,11 +1,11 @@
 package com.studere.studerejava.framework.models.dto.response;
 
-import com.studere.studerejava.studere.models.Course;
+import com.studere.studerejava.framework.models.Module;
 import lombok.Setter;
 
 @Setter
 public class SessionTimeDistributionDTO {
-    private Course course;
+    private Module module;
 
     private Long totalDuration;
 }

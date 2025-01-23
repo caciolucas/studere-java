@@ -32,6 +32,10 @@ public abstract class SessionService<T extends Session> {
         return sessionRepository.findByPlanId(planId);
     }
 
+    public List<T> listAllUserSessions(UUID userId) {
+        return sessionRepository.findByPlanUserId(userId);
+    }
+
     public Optional<T> findActiveSessionByPlanId(UUID planId) {
         return sessionRepository.findActiveSessionByPlanId(planId);
     }
@@ -113,5 +117,9 @@ public abstract class SessionService<T extends Session> {
     public List<T> getSessionsForLastNDays(int N) {
         LocalDateTime nowMinusNDays = LocalDateTime.now().minusDays(N);
         return sessionRepository.findSessionsAfterDate(nowMinusNDays);
+    }
+
+    public List<T> findByPlanUserId(UUID userId) {
+        return sessionRepository.findByPlanUserId(userId);
     }
 }
