@@ -5,6 +5,7 @@ import com.studere.studerejava.framework.repositories.GoalRepository;
 import com.studere.studerejava.framework.services.GoalService;
 import com.studere.studerejava.framework.services.ModuleService;
 import com.studere.studerejava.studere.models.Activity;
+import com.studere.studerejava.studere.models.dto.ActivityCreateOrUpdateDTO;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -12,7 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @Service
-public class ActivityService extends GoalService<Activity> {
+public class ActivityService extends GoalService<Activity, ActivityCreateOrUpdateDTO> {
 
     public ActivityService(GoalRepository<Activity> goalRepository, ModuleService moduleService) {
         super(goalRepository, moduleService);
@@ -24,7 +25,12 @@ public class ActivityService extends GoalService<Activity> {
     }
 
     @Override
-    protected void validateGoal(GoalCreateOrUpdateDTO goalCreateOrUpdateDTO) throws MethodArgumentNotValidException {
+    public void setOtherFields(Activity goal, ActivityCreateOrUpdateDTO goalCreateOrUpdateDTO) {
+        goal.setDueAt(goalCreateOrUpdateDTO.getDueAt());
+    }
+
+    @Override
+    protected void validateGoal(ActivityCreateOrUpdateDTO goalCreateOrUpdateDTO) throws MethodArgumentNotValidException {
 
         if (goalCreateOrUpdateDTO.getDescription().length() >= 255) {
             BindingResult bindingResult =

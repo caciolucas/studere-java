@@ -6,6 +6,7 @@ import com.studere.studerejava.framework.models.PlanItem;
 import com.studere.studerejava.framework.models.dto.request.PlanAiGenerateDTO;
 import com.studere.studerejava.framework.models.dto.request.PlanCreateOrUpdateDTO;
 import com.studere.studerejava.framework.models.dto.response.ErrorResponseDTO;
+import com.studere.studerejava.framework.models.dto.response.PlanDTO;
 import com.studere.studerejava.framework.services.PlanService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -87,7 +88,8 @@ public abstract class PlanController<T extends Plan, U extends PlanItem> {
     @PostMapping("/ai-generate")
     public ResponseEntity<?> aiGenerate(@Valid @RequestBody PlanAiGenerateDTO planAiGenerateDTO, Principal principal) {
         try {
-            return ResponseEntity.ok(planService.aiGeneratePlan(planAiGenerateDTO, UUID.fromString(principal.getName())));
+            PlanDTO plan = planService.aiGeneratePlan(planAiGenerateDTO, UUID.fromString(principal.getName()));
+            return ResponseEntity.ok(plan);
         } catch (BaseException e) {
             throw e;
         } catch (RuntimeException e) {

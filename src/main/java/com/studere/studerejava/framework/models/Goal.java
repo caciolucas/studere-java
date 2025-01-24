@@ -10,13 +10,14 @@ import java.util.Date;
 @Setter
 @Getter
 @Entity
-@Table(name = "modules")
+@Table(name = "goals")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Goal extends BaseModel {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "module_id")
     public Module module;
+
     @Column(name = "title", nullable = false)
     private String title;
     @Column(name = "description")

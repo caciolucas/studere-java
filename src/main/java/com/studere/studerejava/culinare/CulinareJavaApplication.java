@@ -1,5 +1,6 @@
 package com.studere.studerejava.culinare;
 
+import com.studere.studerejava.studere.StudereJavaApplication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -15,6 +16,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 public class CulinareJavaApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CulinareJavaApplication.class, args);
+        SpringApplication app = new SpringApplication(StudereJavaApplication.class);
+        app.setAdditionalProfiles("culinare");  // or pass as a JVM arg
+        app.run(args);
     }
 }

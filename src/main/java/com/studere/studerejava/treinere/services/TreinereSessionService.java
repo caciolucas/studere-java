@@ -6,7 +6,9 @@ import com.studere.studerejava.framework.services.SessionService;
 import com.studere.studerejava.treinere.models.Exercise;
 import com.studere.studerejava.treinere.models.TreinereRoutine;
 import com.studere.studerejava.treinere.models.TreinereSession;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TreinereSessionService extends SessionService<TreinereSession> {
 
     public TreinereSessionService(

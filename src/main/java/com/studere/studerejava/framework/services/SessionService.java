@@ -100,10 +100,11 @@ public abstract class SessionService<T extends Session> {
         }
 
         Date now = new Date();
+        // The full session duration in milliseconds
         Long sessionDuration = now.getTime() - session.getCreatedAt().getTime();
-        Long sessionActiveDuration = sessionDuration - session.getTotalPausedTime();
+        long sessionActiveDuration = sessionDuration - session.getTotalPausedTime();
         session.setEndAt(now);
-        session.setTotalActiveTime(sessionActiveDuration);
+        session.setTotalActiveTime(sessionActiveDuration / 1000);
         session.setStatus(SessionStatus.COMPLETED);
         return sessionRepository.save(session);
     }

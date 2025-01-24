@@ -15,6 +15,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 public class TreinereJavaApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(TreinereJavaApplication.class, args);
+        SpringApplication app = new SpringApplication(TreinereJavaApplication.class);
+        app.setAdditionalProfiles("treinere");  // or pass as a JVM arg
+        app.run(args);
     }
 }

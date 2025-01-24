@@ -10,7 +10,9 @@ import com.studere.studerejava.framework.models.PlanItem;
 import com.studere.studerejava.framework.models.dto.request.PlanAiGenerateDTO;
 import com.studere.studerejava.framework.models.dto.request.PlanCreateOrUpdateDTO;
 import com.studere.studerejava.framework.models.dto.request.PlanItemDTO;
+import com.studere.studerejava.framework.models.dto.response.PlanDTO;
 import com.studere.studerejava.framework.repositories.PlanRepository;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -100,7 +102,7 @@ public abstract class PlanService<T extends Plan, U extends PlanItem> {
         return dto.getPrompt();
     }
 
-    public T aiGeneratePlan(PlanAiGenerateDTO planAiGenerateDTO, UUID userId) {
+    public PlanDTO aiGeneratePlan(@NotNull PlanAiGenerateDTO planAiGenerateDTO, UUID userId) {
         Module module = moduleService.findModuleById(planAiGenerateDTO.getModuleId(), userId);
 
         String finalInput = preparePromptInput(planAiGenerateDTO, userId);
@@ -145,7 +147,17 @@ public abstract class PlanService<T extends Plan, U extends PlanItem> {
 
         planRepository.save(studyPlan);
 
-        return studyPlan;
+        PlanDTO planDTO = new PlanDTO();
+        planDTO.setTitle(studyPlan.getTitle());
+        planDTO.setModuleId(studyPlan.getModule().getId());
+        planDTO.setItems(studyPlan.getPlanItems().stream().map(item -> {
+            PlanItemDTO itemDTO = new PlanItemDTO();
+            itemDTO.setTitle(item.getTitle());
+            itemDTO.setDescription(item.getDescription());
+            return itemDTO;
+        }).toList());
+
+        return planDTO;
     }
 
     /**

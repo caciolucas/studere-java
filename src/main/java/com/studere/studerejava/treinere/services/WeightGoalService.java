@@ -1,6 +1,5 @@
 package com.studere.studerejava.treinere.services;
 
-import com.studere.studerejava.framework.models.dto.request.GoalCreateOrUpdateDTO;
 import com.studere.studerejava.framework.repositories.GoalRepository;
 import com.studere.studerejava.framework.services.GoalService;
 import com.studere.studerejava.framework.services.ModuleService;
@@ -13,7 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @Service
-public class WeightGoalService extends GoalService<WeightGoal> {
+public class WeightGoalService extends GoalService<WeightGoal, WeightGoalCreateOrUpdateDTO> {
     public WeightGoalService(GoalRepository<WeightGoal> goalRepository, ModuleService moduleService) {
         super(goalRepository, moduleService);
     }
@@ -24,7 +23,7 @@ public class WeightGoalService extends GoalService<WeightGoal> {
     }
 
     @Override
-    protected void validateGoal(GoalCreateOrUpdateDTO goalCreateOrUpdateDTO) throws MethodArgumentNotValidException {
+    protected void validateGoal(WeightGoalCreateOrUpdateDTO goalCreateOrUpdateDTO) throws MethodArgumentNotValidException {
         // Check if it's actually a WeightGoalCreateOrUpdateDTO
         if (goalCreateOrUpdateDTO instanceof WeightGoalCreateOrUpdateDTO weightDto) {
 

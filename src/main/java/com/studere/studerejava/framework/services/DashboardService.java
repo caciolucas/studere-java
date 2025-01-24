@@ -42,11 +42,11 @@ public abstract class DashboardService<T extends Session> {
         return totalTimeByModule.entrySet().stream()
                 .map(entry -> {
                     SessionTimeDistributionDTO dto = new SessionTimeDistributionDTO();
-                    dto.setModule(entry.getKey());
+                    dto.setModuleId(entry.getKey().getId());
+                    dto.setModuleName(entry.getKey().getName());
                     dto.setTotalDuration(entry.getValue());   // the total active time sum
                     return dto;
-                })
-                .collect(Collectors.toList());
+                }).toList();
     }
 
     /**
